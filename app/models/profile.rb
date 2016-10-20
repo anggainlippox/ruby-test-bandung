@@ -3,7 +3,7 @@ class Profile < ActiveRecord::Base
   belongs_to :user
 
   validates  :directories, presence: true
-  validates  :directories, uniqueness: true
+  # validates  :directories, uniqueness: true
 
   before_create :backup
   after_destroy :clean_contents
@@ -11,8 +11,12 @@ class Profile < ActiveRecord::Base
   def backup
     # system("sudo -S chmod -R 777 /home/angga/Videos/") if cannot access folder
     ff = self.exclusions.split(",").map{|x| "--exclude='#{x}'"}.join(" ")
-    # system("rsync -avz #{ff} /home/angga/Pictures/ #{self.directories}") # for me to test
-    system("rsync -avz #{ff} /home/ #{self.directories}")
+    dir_name = "#{self.name.gsub(" ","_")}-#{Time.now.to_i}"
+    system("mkdir #{dir_name}")
+    self.storage_directory = "public/#{dir_name}"
+    self.directories.split(",").each do |directory|
+        system("rsync -avz #{ff} #{directory} public/#{dir_name}")
+    end
   end
 
   def clean_contents

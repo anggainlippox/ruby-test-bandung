@@ -11,7 +11,8 @@ class ProfilesController < ApplicationController
   # GET /profiles/1
   # GET /profiles/1.json
   def show
-    content = Profile.detail(@profile.directories)
+    # content = Profile.detail(@profile.directories)
+    content = Profile.detail(@profile.storage_directory)
     @directory = @profile.directories
     @total_size = content.first
     @content = content.last

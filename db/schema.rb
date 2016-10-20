@@ -20,9 +20,10 @@ ActiveRecord::Schema.define(version: 20161014063524) do
     t.string   "name"
     t.string   "directories"
     t.string   "exclusions"
+    t.string   "storage_directory"
     t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "users", force: :cascade do |t|
