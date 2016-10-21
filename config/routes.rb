@@ -5,7 +5,8 @@ Rails.application.routes.draw do
 
   resources :profiles do
     member do
-      get :sub_folder
+      get  :sub_folder
+      post :restore
     end
     collection do
       delete :destroy_file

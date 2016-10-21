@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_profile, only: [:show, :edit, :update, :destroy, :sub_folder]
+  before_action :set_profile, only: [:show, :edit, :update, :destroy, :sub_folder, :restore]
 
   # GET /profiles
   # GET /profiles.json
@@ -85,6 +85,17 @@ class ProfilesController < ApplicationController
       end
     else
       redirect_to :back, notice: 'Failed destroy file.'
+    end
+  end
+
+  def restore
+    if @profile.restore
+      respond_to do |format|
+        format.html { redirect_to :back, notice: 'successfully restore.' }
+        format.json { head :no_content }
+      end
+    else
+      redirect_to :back, notice: 'Failed restore.'
     end
   end
 

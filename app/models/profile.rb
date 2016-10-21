@@ -12,7 +12,7 @@ class Profile < ActiveRecord::Base
     # system("sudo -S chmod -R 777 /home/angga/Videos/") if cannot access folder
     ff = self.exclusions.split(",").map{|x| "--exclude='#{x}'"}.join(" ")
     dir_name = "#{self.name.gsub(" ","_")}-#{Time.now.to_i}"
-    system("mkdir #{dir_name}")
+    # system("mkdir #{dir_name}")
     self.storage_directory = "public/#{dir_name}"
     self.directories.split(",").each do |directory|
         system("rsync -avz #{ff} #{directory} public/#{dir_name}")
@@ -20,8 +20,16 @@ class Profile < ActiveRecord::Base
   end
 
   def clean_contents
-    directory = !self.directories.strip[-1].eql?("/") ? (self.directories.strip + "/*") : (self.directories.strip + "*")
-    return system("rm -rf #{directory}")
+    return system("rm -rf #{self.storage_directory}")
+  end
+
+  def restore
+    self.directories.split(",").each do |directory|
+      backup_base = directory.split("/").last
+      source_dir = "#{self.storage_directory}/#{backup_base}"
+      source_storage = File.directory?(source_dir) ? "#{source_dir}/*" : source_dir
+      system("rsync -avz #{source_storage} #{directory}")
+    end
   end
 
   def self.detail(directories)

@@ -1,7 +1,9 @@
 <p id="notice"><%= notice %></p>
 
 <% if params[:action].eql?("show")%>
-  <%= link_to 'Back', profiles_path %> | <%= link_to 'Destroy', @profile, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <%= link_to 'Back', profiles_path %> | 
+  <%= link_to 'Destroy', @profile, method: :delete, data: { confirm: 'Are you sure?' } %> | 
+  <%= link_to 'Restore', restore_profile_path(@profile), method: :post, data: { confirm: 'Are you sure?' } %>
 <% else %>
   <%= link_to "Back", ( @profile.storage_directory.eql?(@back_url) ? profile_path(@profile) : sub_folder_profile_path(id: @profile.id, directory: @back_url)) %>
 <% end %>
